@@ -11,14 +11,12 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         pyver: [ cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39 ]
-        TOXENV: [py36, py37, py38, py39, s3fs, gcsfs]
       fail-fast: false
     runs-on: ${{ matrix.os }}
     env:
       py: /opt/python/${{ matrix.pyver }}/bin/python
       img: quay.io/pypa/manylinux2014_aarch64
       python-version: ${{ matrix.pyver }}
-      TOXENV: ${{ matrix.TOXENV }}
     defaults:
       run:
         shell: bash -l {0}
@@ -41,6 +39,8 @@ jobs:
             export Python=${{ env.python-version }} && \
             conda create --name TEST python=${Python:2:1}.${Python:3:1} && \
             source activate TEST && \
+            python --version && \
+            uname -m && \
             conda install tox tox-conda && \
             python setup.py install && \
             tox -v && \
