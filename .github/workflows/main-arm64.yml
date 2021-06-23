@@ -39,8 +39,9 @@ jobs:
             chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH && \
             export PATH=$MINICONDA_PATH/bin:$PATH && \
             export Python=${{ env.python-version }} && \
-            conda create --name TEST python=${Python:2:1}.${Python:3:1} --file ci/environment-py38.yml && \
+            conda create --name TEST python=${Python:2:1}.${Python:3:1} && \
             source activate TEST && \
+            conda install tox tox-conda && \
             python setup.py install && \
             tox -v && \
             deactivate'
