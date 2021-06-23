@@ -1,0 +1,46 @@
+name: CI-arm64
+
+on:
+  pull_request:
+  push:
+    branches: [ master ]
+
+jobs:
+  test_and_build_arm64:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        pyver: [ cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39 ]
+        TOXENV: [py36, py37, py38, py39, s3fs, gcsfs]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    env:
+      py: /opt/python/${{ matrix.pyver }}/bin/python
+      img: quay.io/pypa/manylinux2014_aarch64
+      python-version: ${{ matrix.pyver }}
+      TOXENV: ${{ matrix.TOXENV }}
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+      - name: Install and Run tests
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+            ${{ env.img }} \
+            bash -exc 'yum install -y wget && \
+            yum -y install wget && \
+            echo "Set Up Conda Env" && \
+            wget https://github.com/conda-forge/miniforge/releases/download/4.8.2-1/Miniforge3-4.8.2-1-Linux-aarch64.sh -O miniconda.sh && \
+            export MINICONDA_PATH=/root/miniconda && \
+            chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH && \
+            export PATH=$MINICONDA_PATH/bin:$PATH && \
+            export Python=${{ env.python-version }} && \
+            conda create --name TEST python=${Python:2:1}.${Python:3:1} --file ci/environment-py38.yml && \
+            source activate TEST && \
+            python setup.py install && \
+            tox -v && \
+            deactivate'
