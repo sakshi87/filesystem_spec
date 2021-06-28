@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        pyver: [ cp37-cp37m ]
+        pyver: [ cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39 ]
       fail-fast: false
     runs-on: ${{ matrix.os }}
     env:
@@ -37,7 +37,7 @@ jobs:
             chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH && \
             export PATH=$MINICONDA_PATH/bin:$PATH && \
             export Python=${{ env.python-version }} && \
-            conda create --name TEST python=${Python:2:1}.${Python:3:1} && \
+            conda create --name TEST python=${matrix.pyver} && \
             source activate TEST && \
             python --version && \
             uname -m && \
