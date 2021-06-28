@@ -37,7 +37,7 @@ jobs:
             chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH && \
             export PATH=$MINICONDA_PATH/bin:$PATH && \
             export Python=${{ env.python-version }} && \
-            conda create --name TEST python=${matrix.pyver} && \
+            conda create --name TEST python=${{ matrix.pyver }} && \
             source activate TEST && \
             python --version && \
             uname -m && \
