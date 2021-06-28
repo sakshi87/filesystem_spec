@@ -43,5 +43,5 @@ jobs:
             uname -m && \
             conda install tox tox-conda && \
             python setup.py install && \
-            tox -v && \
+            tox -e py36 && \
             deactivate'
