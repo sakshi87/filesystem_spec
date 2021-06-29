@@ -43,5 +43,10 @@ jobs:
             uname -m && \
             conda install tox tox-conda && \
             python setup.py install && \
+            conda install pip paramiko requests zstandard python-snappy && \
+            conda install aiohttp lz4 distributed dask 'pyarrow >= 1' && \
+            conda install panel notebook pygit2 git s3fs pyftpdlib cloudpickle && \
+            conda install pytest pytest-benchmark pytest-cov pytest-vcr fusepy && \
+            conda install msgpack-python python-libarchive-c numpy nomkl jinja2 && \
             tox -e py36 && \
             deactivate'
