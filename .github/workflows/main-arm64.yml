@@ -44,6 +44,7 @@ jobs:
             conda install tox tox-conda && \
             python setup.py install && \
             conda config --env --add channels defaults && \
+            conda update -n base conda && \
             conda install pip paramiko requests zstandard python-snappy && \
             conda install aiohttp lz4 distributed dask 'pyarrow >= 1' && \
             conda install panel notebook pygit2 git s3fs pyftpdlib cloudpickle && \
