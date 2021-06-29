@@ -50,5 +50,6 @@ jobs:
             conda install pytest pytest-benchmark pytest-cov pytest-vcr fusepy && \
             conda install msgpack-python python-libarchive-c numpy nomkl jinja2 && \
             pip install hadoop-test-cluster==0.1.0 smbprotocol && \
-            py.test --cov=fsspec -v -r s {posargs} && \
+            tox -e py36 && \
+            #py.test --cov=fsspec -v -r s {posargs} && \
             deactivate'
